@@ -1,0 +1,31 @@
+# WordPress core (not tracked — theme files only in this repo)
+wp-admin/
+wp-includes/
+wp-content/plugins/
+wp-content/uploads/
+wp-content/upgrade/
+wp-content/cache/
+wp-content/languages/
+wp-content/themes/twenty*/
+wp-login.php
+wp-*.php
+xmlrpc.php
+*.sql
+
+# Environment / config
+.env
+wp-config.php
+wp-config-local.php
+
+# OS / Editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.suo
+*.user
+
+# Node / build artifacts
+node_modules/
+dist/
+*.log

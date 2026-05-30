@@ -1,0 +1,228 @@
+/*
+Theme Name: bit2ai Theme
+Theme URI: https://bit2ai.de
+Author: Sajib Chaudhury
+Author URI: https://bit2ai.de
+Description: Custom theme for bit2ai.de — Web · Apps · AI · Automatisierung
+Version: 1.0.0
+License: GNU General Public License v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: bit2ai-theme
+Tags: custom, business, dark, ai
+*/
+
+/* ============================================================
+   CSS RESET
+   ============================================================ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+img, picture, video, canvas, svg {
+  display: block;
+  max-width: 100%;
+}
+
+input, button, textarea, select {
+  font: inherit;
+}
+
+p, h1, h2, h3, h4, h5, h6 {
+  overflow-wrap: break-word;
+}
+
+ul, ol {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+/* Remove default WP styles */
+.wp-block-* { all: unset; }
+
+/* ============================================================
+   CSS VARIABLES
+   ============================================================ */
+:root {
+  --color-navy:     #0B1220;
+  --color-deep:     #1E3A5F;
+  --color-blue:     #3B82F6;
+  --color-cyan:     #38BDF8;
+  --color-white:    #F8FAFC;
+  --color-gray-900: #111827;
+  --color-gray-600: #4B5563;
+  --color-gray-100: #F3F4F6;
+
+  --font-sans: 'IBM Plex Sans', system-ui, -apple-system, sans-serif;
+  --font-mono: 'IBM Plex Mono', 'Courier New', monospace;
+
+  --section-pad-desktop: 100px;
+  --section-pad-mobile:  60px;
+  --content-max:         1100px;
+  --radius-btn:          6px;
+  --radius-card:         8px;
+  --shadow-card:         0 4px 24px rgba(0, 0, 0, 0.10);
+
+  --dot-grid: radial-gradient(circle, rgba(56,189,248,0.06) 1px, transparent 1px);
+}
+
+/* ============================================================
+   GLOBAL BASE
+   ============================================================ */
+html {
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  font-size: 1rem;
+  background-color: var(--color-navy);
+  color: var(--color-white);
+}
+
+.container {
+  max-width: var(--content-max);
+  margin-inline: auto;
+  padding-inline: 24px;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+h1 { font-size: clamp(2rem, 5vw, 3.5rem); }
+h2 { font-size: clamp(1.6rem, 3.5vw, 2.5rem); }
+h3 { font-size: clamp(1.2rem, 2.5vw, 1.5rem); }
+
+p {
+  font-size: 1.0625rem;
+  line-height: 1.7;
+}
+
+.overline {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-cyan);
+  display: block;
+  margin-bottom: 16px;
+}
+
+/* Sections */
+.section {
+  padding-block: var(--section-pad-desktop);
+}
+
+.section--dark {
+  background-color: var(--color-navy);
+  color: var(--color-white);
+}
+
+.section--dark-dot {
+  background-color: var(--color-navy);
+  background-image: var(--dot-grid);
+  background-size: 28px 28px;
+  color: var(--color-white);
+}
+
+.section--light {
+  background-color: var(--color-white);
+  color: var(--color-gray-900);
+}
+
+.section--light p {
+  color: var(--color-gray-600);
+}
+
+.section--gradient {
+  background: linear-gradient(135deg, var(--color-deep), var(--color-navy));
+  color: var(--color-white);
+}
+
+/* Buttons */
+.btn {
+  display: inline-block;
+  border-radius: var(--radius-btn);
+  padding: 14px 28px;
+  font-family: var(--font-sans);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  line-height: 1;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  cursor: pointer;
+}
+
+.btn--primary {
+  background-color: var(--color-blue);
+  color: var(--color-white);
+  border: 2px solid var(--color-blue);
+}
+
+.btn--primary:hover,
+.btn--primary:focus {
+  background-color: var(--color-deep);
+  border-color: var(--color-deep);
+}
+
+.btn--outline {
+  background-color: transparent;
+  color: var(--color-white);
+  border: 2px solid var(--color-white);
+}
+
+.btn--outline:hover,
+.btn--outline:focus {
+  background-color: var(--color-white);
+  color: var(--color-navy);
+}
+
+.btn--outline-blue {
+  background-color: transparent;
+  color: var(--color-blue);
+  border: 2px solid var(--color-blue);
+}
+
+.btn--outline-blue:hover,
+.btn--outline-blue:focus {
+  background-color: var(--color-blue);
+  color: var(--color-white);
+}
+
+/* Focus accessibility */
+:focus-visible {
+  outline: 2px solid var(--color-cyan);
+  outline-offset: 3px;
+}
+
+/* Utility */
+.text-center { text-align: center; }
+.text-cyan    { color: var(--color-cyan); }
+.text-blue    { color: var(--color-blue); }
