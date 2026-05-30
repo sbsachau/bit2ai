@@ -77,12 +77,14 @@ remove_action( 'wp_print_styles', 'print_emoji_styles' );
 remove_action( 'admin_print_scripts', 'print_emoji_detection_script' );
 remove_action( 'admin_print_styles', 'print_emoji_styles' );
 
-// Remove block library CSS if not using Gutenberg blocks on frontend
+// Remove block library and global-styles CSS
+// Priority 100 ensures this runs after WordPress registers everything
 add_action( 'wp_enqueue_scripts', function () {
     wp_dequeue_style( 'wp-block-library' );
     wp_dequeue_style( 'wp-block-library-theme' );
-    wp_dequeue_style( 'global-styles' );
-}, 20 );
+    wp_dequeue_style( 'classic-theme-styles' );
+    wp_deregister_style( 'global-styles' );
+}, 100 );
 
 // ============================================================
 // Contact Form — handle submission

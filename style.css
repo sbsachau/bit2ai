@@ -158,8 +158,17 @@ p {
   color: var(--color-gray-900);
 }
 
-.section--light p {
+/* Explicit color overrides — beat WordPress global-styles specificity */
+.section--light p,
+.section--light li {
   color: var(--color-gray-600);
+}
+
+.section--light h1,
+.section--light h2,
+.section--light h3,
+.section--light h4 {
+  color: var(--color-gray-900);
 }
 
 .section--gradient {
