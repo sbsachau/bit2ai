@@ -42,11 +42,19 @@ function bit2ai_enqueue_assets() {
         null
     );
 
-    // Main stylesheet
+    // style.css — CSS reset, variables (:root), global base styles
+    wp_enqueue_style(
+        'bit2ai-style',
+        get_stylesheet_uri(),
+        [ 'google-fonts-ibm-plex' ],
+        '1.0.0'
+    );
+
+    // Main stylesheet — all component/layout styles
     wp_enqueue_style(
         'bit2ai-main',
         get_template_directory_uri() . '/assets/css/main.css',
-        [ 'google-fonts-ibm-plex' ],
+        [ 'bit2ai-style' ],
         '1.0.0'
     );
 
