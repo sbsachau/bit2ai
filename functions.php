@@ -213,7 +213,7 @@ function bit2ai_run_setup() {
     // Create Primary menu
     $primary_menu_id = wp_create_nav_menu( 'Hauptnavigation' );
     if ( ! is_wp_error( $primary_menu_id ) ) {
-        $primary_items = [ 'Leistungen' => 'leistungen', 'Über mich' => 'ueber-mich', 'Kontakt' => 'kontakt' ];
+        $primary_items = [ 'Leistungen' => 'leistungen', 'Über mich' => 'ueber-mich' ];
         foreach ( $primary_items as $label => $slug ) {
             $page = get_page_by_path( $slug, OBJECT, 'page' );
             if ( $page ) {
