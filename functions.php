@@ -127,6 +127,133 @@ add_action( 'admin_post_nopriv_bit2ai_contact', 'bit2ai_handle_contact_form' );
 add_action( 'admin_post_bit2ai_contact', 'bit2ai_handle_contact_form' );
 
 // ============================================================
+// Theme Activation Setup — auto-create pages, menus, front page
+// Runs once when the theme is activated. Safe to re-run (checks
+// for existing slugs before creating).
+// ============================================================
+function bit2ai_run_setup() {
+    // Pages: [ 'Title', 'slug', 'Template Name' or '' ]
+    $pages = [
+        [ 'Startseite',      '',             '' ],          // homepage — no template needed
+        [ 'Leistungen',      'leistungen',   'Leistungen' ],
+        [ 'Über mich',       'ueber-mich',   'Über mich' ],
+        [ 'Kontakt',         'kontakt',      'Kontakt' ],
+        [ 'Impressum',       'impressum',    'Impressum' ],
+        [ 'Datenschutz',     'datenschutz',  'Datenschutz' ],
+    ];
+
+    $front_page_id = 0;
+
+    foreach ( $pages as $page_data ) {
+        list( $title, $slug, $template ) = $page_data;
+
+        // Skip if a page with this slug already exists
+        $existing = $slug
+            ? get_page_by_path( $slug, OBJECT, 'page' )
+            : get_page_by_path( 'startseite', OBJECT, 'page' );
+
+        if ( $existing ) {
+            if ( $slug === '' ) {
+                $front_page_id = $existing->ID;
+            }
+            continue;
+        }
+
+        $page_slug = $slug ?: 'startseite';
+
+        $page_id = wp_insert_post( [
+            'post_title'   => $title,
+            'post_name'    => $page_slug,
+            'post_status'  => 'publish',
+            'post_type'    => 'page',
+            'post_content' => '',
+        ] );
+
+        if ( $page_id && ! is_wp_error( $page_id ) ) {
+            if ( $template ) {
+                // Map display name to filename
+                $template_map = [
+                    'Leistungen'  => 'page-leistungen.php',
+                    'Über mich'   => 'page-ueber-mich.php',
+                    'Kontakt'     => 'page-kontakt.php',
+                    'Impressum'   => 'page-impressum.php',
+                    'Datenschutz' => 'page-datenschutz.php',
+                ];
+                if ( isset( $template_map[ $template ] ) ) {
+                    update_post_meta( $page_id, '_wp_page_template', $template_map[ $template ] );
+                }
+            }
+
+            if ( $slug === '' ) {
+                $front_page_id = $page_id;
+            }
+        }
+    }
+
+    // Set static front page
+    if ( $front_page_id ) {
+        update_option( 'show_on_front', 'page' );
+        update_option( 'page_on_front', $front_page_id );
+    }
+
+    // Set pretty permalinks (post name)
+    update_option( 'permalink_structure', '/%postname%/' );
+    flush_rewrite_rules();
+
+    // Create Primary menu
+    $primary_menu_id = wp_create_nav_menu( 'Hauptnavigation' );
+    if ( ! is_wp_error( $primary_menu_id ) ) {
+        $primary_items = [ 'Leistungen' => 'leistungen', 'Über mich' => 'ueber-mich', 'Kontakt' => 'kontakt' ];
+        foreach ( $primary_items as $label => $slug ) {
+            $page = get_page_by_path( $slug, OBJECT, 'page' );
+            if ( $page ) {
+                wp_update_nav_menu_item( $primary_menu_id, 0, [
+                    'menu-item-title'     => $label,
+                    'menu-item-object'    => 'page',
+                    'menu-item-object-id' => $page->ID,
+                    'menu-item-type'      => 'post_type',
+                    'menu-item-status'    => 'publish',
+                ] );
+            }
+        }
+        $locations = get_theme_mod( 'nav_menu_locations', [] );
+        $locations['primary'] = $primary_menu_id;
+        set_theme_mod( 'nav_menu_locations', $locations );
+    }
+
+    // Create Footer menu
+    $footer_menu_id = wp_create_nav_menu( 'Footer Navigation' );
+    if ( ! is_wp_error( $footer_menu_id ) ) {
+        $footer_items = [
+            'Leistungen'  => 'leistungen',
+            'Über mich'   => 'ueber-mich',
+            'Kontakt'     => 'kontakt',
+            'Impressum'   => 'impressum',
+            'Datenschutz' => 'datenschutz',
+        ];
+        foreach ( $footer_items as $label => $slug ) {
+            $page = get_page_by_path( $slug, OBJECT, 'page' );
+            if ( $page ) {
+                wp_update_nav_menu_item( $footer_menu_id, 0, [
+                    'menu-item-title'     => $label,
+                    'menu-item-object'    => 'page',
+                    'menu-item-object-id' => $page->ID,
+                    'menu-item-type'      => 'post_type',
+                    'menu-item-status'    => 'publish',
+                ] );
+            }
+        }
+        $locations = get_theme_mod( 'nav_menu_locations', [] );
+        $locations['footer'] = $footer_menu_id;
+        set_theme_mod( 'nav_menu_locations', $locations );
+    }
+
+    // Mark setup as done
+    update_option( 'bit2ai_setup_done', '1' );
+}
+add_action( 'after_switch_theme', 'bit2ai_run_setup' );
+
+// ============================================================
 // WPForms Lite
 // NOTE: To install WPForms Lite manually:
 //   Dashboard → Plugins → Add New → search "WPForms Lite" → Install & Activate
