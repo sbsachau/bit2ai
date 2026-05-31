@@ -260,10 +260,47 @@ function bit2ai_run_setup() {
         set_theme_mod( 'nav_menu_locations', $locations );
     }
 
+    // Populate legal page content
+    bit2ai_populate_legal_pages();
+
     // Mark setup as done
     update_option( 'bit2ai_setup_done', '1' );
 }
 add_action( 'after_switch_theme', 'bit2ai_run_setup' );
+
+// ============================================================
+// Populate Impressum + Datenschutz content if empty
+// Called on activation and also on admin_init as a safety net
+// ============================================================
+function bit2ai_populate_legal_pages() {
+    $legal = [
+        'impressum' => [
+            'title'   => 'Impressum',
+            'content' => '<!-- wp:heading {"level":2} --><h2>Angaben gemäß § 5 TMG</h2><!-- /wp:heading --><!-- wp:paragraph --><p>Sajib Chaudhury<br>[STRASSE UND HAUSNUMMER EINTRAGEN]<br>[PLZ ORT EINTRAGEN]<br>Deutschland</p><!-- /wp:paragraph --><!-- wp:heading {"level":2} --><h2>Kontakt</h2><!-- /wp:heading --><!-- wp:paragraph --><p>E-Mail: <a href="mailto:info@bit2ai.de">info@bit2ai.de</a><br>Website: <a href="https://bit2ai.de">bit2ai.de</a></p><!-- /wp:paragraph --><!-- wp:heading {"level":2} --><h2>Umsatzsteuer</h2><!-- /wp:heading --><!-- wp:paragraph --><p>Kleinunternehmer gemäß § 19 UStG. Gemäß § 19 Abs. 1 UStG wird keine Umsatzsteuer berechnet.</p><!-- /wp:paragraph --><!-- wp:heading {"level":2} --><h2>Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV</h2><!-- /wp:heading --><!-- wp:paragraph --><p>Sajib Chaudhury<br>[ADRESSE EINTRAGEN]</p><!-- /wp:paragraph --><!-- wp:heading {"level":2} --><h2>Streitschlichtung</h2><!-- /wp:heading --><!-- wp:paragraph --><p>Die Europäische Kommission stellt eine Plattform zur Online-Streitbeilegung bereit: <a href="https://ec.europa.eu/consumers/odr/" target="_blank" rel="noopener noreferrer">https://ec.europa.eu/consumers/odr/</a></p><!-- /wp:paragraph --><!-- wp:paragraph --><p>Wir sind nicht bereit oder verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.</p><!-- /wp:paragraph --><!-- wp:heading {"level":2} --><h2>Haftung für Inhalte</h2><!-- /wp:heading --><!-- wp:paragraph --><p>Als Diensteanbieter sind wir gemäß § 7 Abs. 1 TMG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich.</p><!-- /wp:paragraph --><!-- wp:heading {"level":2} --><h2>Urheberrecht</h2><!-- /wp:heading --><!-- wp:paragraph --><p>Die durch die Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem deutschen Urheberrecht.</p><!-- /wp:paragraph -->',
+        ],
+        'datenschutz' => [
+            'title'   => 'Datenschutz',
+            'content' => '<!-- wp:paragraph --><p><strong>Hinweis:</strong> [VOR LIVEGANG VON ANWALT PRÜFEN LASSEN]</p><!-- /wp:paragraph --><!-- wp:heading {"level":2} --><h2>1. Verantwortlicher</h2><!-- /wp:heading --><!-- wp:paragraph --><p>Sajib Chaudhury<br>[ADRESSE EINTRAGEN]<br>E-Mail: <a href="mailto:info@bit2ai.de">info@bit2ai.de</a></p><!-- /wp:paragraph --><!-- wp:heading {"level":2} --><h2>2. Datenerhebung auf dieser Website</h2><!-- /wp:heading --><!-- wp:heading {"level":3} --><h3>Kontaktformular</h3><!-- /wp:heading --><!-- wp:paragraph --><p>Wenn Sie uns per Kontaktformular eine Anfrage zukommen lassen, werden Ihre Angaben zwecks Bearbeitung der Anfrage bei uns gespeichert. Rechtsgrundlage: Art. 6 Abs. 1 lit. b und f DSGVO.</p><!-- /wp:paragraph --><!-- wp:heading {"level":3} --><h3>Server-Log-Dateien</h3><!-- /wp:heading --><!-- wp:paragraph --><p>Der Provider erhebt automatisch Informationen in Server-Log-Dateien: Browsertyp, Betriebssystem, Referrer-URL, IP-Adresse. Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO.</p><!-- /wp:paragraph --><!-- wp:heading {"level":2} --><h2>3. Cookies</h2><!-- /wp:heading --><!-- wp:paragraph --><p>Diese Website verwendet ausschließlich technisch notwendige Cookies (§ 25 Abs. 2 TTDSG).</p><!-- /wp:paragraph --><!-- wp:heading {"level":2} --><h2>4. Ihre Rechte</h2><!-- /wp:heading --><!-- wp:paragraph --><p>Sie haben das Recht auf Auskunft (Art. 15), Berichtigung (Art. 16), Löschung (Art. 17), Einschränkung (Art. 18) und Datenübertragbarkeit (Art. 20 DSGVO). Kontakt: <a href="mailto:info@bit2ai.de">info@bit2ai.de</a></p><!-- /wp:paragraph --><!-- wp:heading {"level":2} --><h2>5. Hosting</h2><!-- /wp:heading --><!-- wp:paragraph --><p>Hosting durch all-inkl.com, Server in Deutschland. <a href="https://all-inkl.com/datenschutzinformationen/" target="_blank" rel="noopener noreferrer">Datenschutzinfos all-inkl.com</a></p><!-- /wp:paragraph -->',
+        ],
+    ];
+
+    foreach ( $legal as $slug => $data ) {
+        $page = get_page_by_path( $slug, OBJECT, 'page' );
+        if ( $page && empty( trim( $page->post_content ) ) ) {
+            wp_update_post( [
+                'ID'           => $page->ID,
+                'post_content' => $data['content'],
+            ] );
+        }
+    }
+}
+
+// Run on every admin load as safety net — only updates if content is empty
+add_action( 'admin_init', function () {
+    if ( get_option( 'bit2ai_setup_done' ) === '1' ) {
+        bit2ai_populate_legal_pages();
+    }
+} );
 
 // ============================================================
 // WPForms Lite
