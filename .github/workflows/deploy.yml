@@ -18,7 +18,7 @@ jobs:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          server-dir: /html/wp-content/themes/bit2ai-theme/
+          server-dir: /bit2ai.de/wp-content/themes/bit2ai-theme/
           exclude: |
             **/.git*
             **/.git*/**
