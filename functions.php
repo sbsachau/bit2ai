@@ -273,6 +273,11 @@ add_action( 'after_switch_theme', 'bit2ai_run_setup' );
 // Called on activation and also on admin_init as a safety net
 // ============================================================
 function bit2ai_populate_legal_pages() {
+    $version = '1.0.2';
+    if ( get_option( 'bit2ai_legal_version' ) === $version ) {
+        return; // already applied
+    }
+
     $legal = [
         'impressum' => [
             'title'   => 'Impressum',
@@ -286,13 +291,15 @@ function bit2ai_populate_legal_pages() {
 
     foreach ( $legal as $slug => $data ) {
         $page = get_page_by_path( $slug, OBJECT, 'page' );
-        if ( $page && empty( trim( $page->post_content ) ) ) {
+        if ( $page ) {
             wp_update_post( [
                 'ID'           => $page->ID,
                 'post_content' => $data['content'],
             ] );
         }
     }
+
+    update_option( 'bit2ai_legal_version', $version );
 }
 
 // Run on every admin load — only updates pages that are still empty
