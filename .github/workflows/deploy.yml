@@ -23,11 +23,10 @@ jobs:
         run: |
           echo "machine $FTP_SERVER login $FTP_USERNAME password $FTP_PASSWORD" > ~/.netrc
           chmod 600 ~/.netrc
-          lftp -d -c "
+          lftp -c "
             set sftp:auto-confirm yes;
             set net:reconnect-interval-base 5;
             set net:max-retries 3;
-            set debug 10;
             open sftp://$FTP_SERVER;
             mirror --reverse --delete --verbose \
               --exclude='^\.git' \
@@ -37,5 +36,5 @@ jobs:
               --exclude='CLAUDE\.md$' \
               --exclude='\.github/' \
               ./ /bit2ai.de/wp-content/themes/bit2ai-theme/;
-          " 2>&1 || true
+          "
           rm -f ~/.netrc
