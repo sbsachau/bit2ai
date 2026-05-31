@@ -21,11 +21,14 @@ jobs:
           FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
           FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
         run: |
-          lftp -c "
+          echo "machine $FTP_SERVER login $FTP_USERNAME password $FTP_PASSWORD" > ~/.netrc
+          chmod 600 ~/.netrc
+          lftp -d -c "
             set sftp:auto-confirm yes;
             set net:reconnect-interval-base 5;
             set net:max-retries 3;
-            open sftp://$FTP_USERNAME:$FTP_PASSWORD@$FTP_SERVER;
+            set debug 10;
+            open sftp://$FTP_SERVER;
             mirror --reverse --delete --verbose \
               --exclude='^\.git' \
               --exclude='MEMORY\.md$' \
@@ -34,4 +37,5 @@ jobs:
               --exclude='CLAUDE\.md$' \
               --exclude='\.github/' \
               ./ /bit2ai.de/wp-content/themes/bit2ai-theme/;
-          "
+          " 2>&1 || true
+          rm -f ~/.netrc
