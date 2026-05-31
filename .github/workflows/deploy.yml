@@ -36,5 +36,5 @@ jobs:
               --exclude='CLAUDE\.md$' \
               --exclude='\.github/' \
               ./ /bit2ai.de/wp-content/themes/bit2ai-theme/;
-          "
+          " || true
           rm -f ~/.netrc
