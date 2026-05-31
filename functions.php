@@ -295,12 +295,8 @@ function bit2ai_populate_legal_pages() {
     }
 }
 
-// Run on every admin load as safety net — only updates if content is empty
-add_action( 'admin_init', function () {
-    if ( get_option( 'bit2ai_setup_done' ) === '1' ) {
-        bit2ai_populate_legal_pages();
-    }
-} );
+// Run on every admin load — only updates pages that are still empty
+add_action( 'admin_init', 'bit2ai_populate_legal_pages' );
 
 // ============================================================
 // WPForms Lite
