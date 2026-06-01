@@ -12,6 +12,53 @@ Tags: custom, business, dark, ai
 */
 
 /* ============================================================
+   LOCAL FONTS — IBM Plex Sans + IBM Plex Mono
+   No external requests — DSGVO compliant
+   ============================================================ */
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url('assets/fonts/ibm-plex-sans-300.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('assets/fonts/ibm-plex-sans-400.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('assets/fonts/ibm-plex-sans-500.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'IBM Plex Sans';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('assets/fonts/ibm-plex-sans-600.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url('assets/fonts/ibm-plex-mono-300.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('assets/fonts/ibm-plex-mono-400.woff2') format('woff2');
+}
+
+/* ============================================================
    CSS RESET
    ============================================================ */
 *, *::before, *::after {

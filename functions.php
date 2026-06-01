@@ -36,19 +36,11 @@ add_action( 'after_setup_theme', 'bit2ai_setup' );
 // Enqueue Styles & Scripts
 // ============================================================
 function bit2ai_enqueue_assets() {
-    // Google Fonts — IBM Plex Sans + IBM Plex Mono
-    wp_enqueue_style(
-        'google-fonts-ibm-plex',
-        'https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap',
-        [],
-        null
-    );
-
-    // style.css — CSS reset, variables (:root), global base styles
+    // style.css — local @font-face, CSS reset, variables, global base styles
     wp_enqueue_style(
         'bit2ai-style',
         get_stylesheet_uri(),
-        [ 'google-fonts-ibm-plex' ],
+        [],
         '1.0.0'
     );
 
