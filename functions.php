@@ -64,6 +64,31 @@ function bit2ai_enqueue_assets() {
 add_action( 'wp_enqueue_scripts', 'bit2ai_enqueue_assets' );
 
 // ============================================================
+// Remove WordPress traces — generator tag, version hints
+// ============================================================
+remove_action( 'wp_head', 'wp_generator' );
+remove_action( 'wp_head', 'wlwmanifest_link' );
+remove_action( 'wp_head', 'rsd_link' );
+remove_action( 'wp_head', 'wp_shortlink_wp_head' );
+add_filter( 'the_generator', '__return_empty_string' );
+
+// Remove WP version from scripts/styles query strings
+add_filter( 'style_loader_src',  'bit2ai_remove_wp_ver_css_js', 9999 );
+add_filter( 'script_loader_src', 'bit2ai_remove_wp_ver_css_js', 9999 );
+function bit2ai_remove_wp_ver_css_js( $src ) {
+    return $src ? remove_query_arg( 'ver', $src ) : $src;
+}
+
+// Custom SVG favicon — replaces WordPress logo in browser tab
+function bit2ai_favicon() {
+    $uri = get_template_directory_uri();
+    echo '<link rel="icon" type="image/svg+xml" href="' . esc_url( $uri . '/assets/favicon.svg' ) . '">' . "\n";
+    echo '<link rel="alternate icon" href="' . esc_url( $uri . '/assets/favicon.svg' ) . '">' . "\n";
+}
+add_action( 'wp_head', 'bit2ai_favicon' );
+add_action( 'admin_head', 'bit2ai_favicon' );
+
+// ============================================================
 // Remove default WP emoji scripts / styles
 // ============================================================
 remove_action( 'wp_head', 'print_emoji_detection_script', 7 );
