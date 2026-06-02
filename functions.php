@@ -79,14 +79,16 @@ function bit2ai_remove_wp_ver_css_js( $src ) {
     return $src ? remove_query_arg( 'ver', $src ) : $src;
 }
 
+// Remove WordPress built-in favicon output
+remove_action( 'wp_head', 'wp_site_icon', 99 );
+
 // Custom SVG favicon — replaces WordPress logo in browser tab
 function bit2ai_favicon() {
     $uri = get_template_directory_uri();
     echo '<link rel="icon" type="image/svg+xml" href="' . esc_url( $uri . '/assets/favicon.svg' ) . '">' . "\n";
-    echo '<link rel="alternate icon" href="' . esc_url( $uri . '/assets/favicon.svg' ) . '">' . "\n";
+    echo '<link rel="shortcut icon" href="' . esc_url( $uri . '/assets/favicon.svg' ) . '">' . "\n";
 }
-add_action( 'wp_head', 'bit2ai_favicon' );
-add_action( 'admin_head', 'bit2ai_favicon' );
+add_action( 'wp_head', 'bit2ai_favicon', 1 );
 
 // ============================================================
 // Remove default WP emoji scripts / styles
